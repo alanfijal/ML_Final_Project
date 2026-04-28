@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+data/raw/*
+data/interim/*
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+.DS_Store
+.env
+reports/figures/*.png
+*.h5
+*.parquet
+.pytest_cache
