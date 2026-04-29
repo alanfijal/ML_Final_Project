@@ -77,3 +77,12 @@ def load_split(path, split: str = "dev", include_virtual: bool = False, include_
     logger.info("Loaded split=%s: shape=%s, memory=%.2f GB", split, df.shape, mem_gb)
 
     return df 
+
+def print_var_names(path) -> dict:
+    """Read all *_var arrays and return as a dict, also logging each one."""
+    var_keys = ["W_var", "X_s_var", "X_v_var", "T_var", "A_var"]
+    with h5py.File(path, "r") as f:
+        names = {k: _decode_var_names(f[k][:]) for k in var_keys}
+    for k, v in names.items():
+        logger.info("%-10s (%2d): %s", k, len(v), v)
+    return names
