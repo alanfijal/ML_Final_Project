@@ -13,7 +13,7 @@ FIG_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def _subsample(df: pd.DataFrame, n_per_unit: int = 50_000,seed: int = 42) -> pd.DataFrame:
-    """Stratified by unit so every engine is fairly represented."""
+    """Stratified by unit so every engine is fairly represented"""
     rng = np.random.default_rng(seed)
     parts = []
     for u, g in df.groupby("unit"):
@@ -26,7 +26,7 @@ def _subsample(df: pd.DataFrame, n_per_unit: int = 50_000,seed: int = 42) -> pd.
 
 
 def plot_flight_envelope_kde(dev: pd.DataFrame, test: pd.DataFrame, fname: str = "fig03_flight_envelope_kde.png",) -> Path:
-    """Reproduces Figure 3 of the Arias Chao et al. paper: per-unit KDE of altitude, Mach, TRA, and T2. Test units 14 and 15 should visibly divergefrom the training distribution."""
+    """Reproduces Figure 3 of the Arias Chao et al. paper: per-unit KDE of altitude, Mach, TRA, and T2. Test units 14 and 15 should visibly diverge from the training distribution"""
     logger.info("Plotting flight envelope KDE...")
 
     combined = pd.concat([
@@ -98,6 +98,7 @@ def plot_single_flight(df: pd.DataFrame, unit: int, cycle: int, fname: str = "si
     """One flight, four scenario descriptors. Reproduces Figure 4: shows that 
     each cycle contains climb / cruise / descent — motivates cycle-level
     aggregation rather than treating 1 Hz samples as i.i.d."""
+
     logger.info("Plotting single flight trace for unit=%d, cycle=%d", unit, cycle)
     flight = df[(df["unit"] == unit) & (df["cycle"] == cycle)].reset_index(drop=True)
     if flight.empty:

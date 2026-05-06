@@ -16,7 +16,7 @@ INTERIM_DIR.mkdir(parents=True, exist_ok=True)
 @dataclass
 class RegimeClusterer:
     """
-    Sample to an operating regime (climb -> cruise -> descent -> idle)
+    Sample to an operating regime (climb -> cruise -> descent)
     Uses k-means++ initialisation with 10 random restarts
     """
     n_regimes: int = 6
@@ -60,14 +60,9 @@ class RegimeClusterer:
         return summary
     
 
-def elbow_study(
-        df: pd.DataFrame,
-        k_values: tuple[int, ...] = (2, 3, 4, 5, 6, 7, 8, 9, 10),
-        sample_size: int = 200_000,
-        random_state: int = 42
-) -> pd.DataFrame:
+def elbow_study(df: pd.DataFrame, k_values: tuple[int, ...] = (2, 3, 4, 5, 6, 7, 8, 9, 10), sample_size: int = 200_000, random_state: int = 42) -> pd.DataFrame:
     """
-    Fit k-means for a range of k and return inertia. 
+    Fit k-means for a range of k and return inertia
     Used for elbow method of selecting optimal k === K where the marginal reduction in inertia stabilises
     """
     logger.info("Elbow study: k=%s, sample_size=%d", k_values, sample_size)
@@ -92,21 +87,16 @@ def elbow_study(
 
 
 
-def aggregate_to_cycle_level(
-        df: pd.DataFrame,
-        sensor_cols: list[str],
-        regime_labels: np.ndarray | None = None,
-        n_regimes: int | None = None
-) -> pd.DataFrame:
+def aggregate_to_cycle_level(df: pd.DataFrame, sensor_cols: list[str], regime_labels: np.ndarray | None = None, n_regimes: int | None = None) -> pd.DataFrame:
     """
     Aggregate 1HZ data to one row per (unit, cycle)
     Features per cycle:
       - For each sensor: global mean, std, min, max,
-        and (if regime_labels given) per-regime mean.
-      - For each W variable: global mean and std.
+        and (if regime_labels given) per-regime mean
+      - For each W variable: global mean and std
       - Regime mix: fraction of samples spent in each regime.
-      - Flight duration in seconds (= number of 1Hz samples).
-      - Cycle index (raw cycle number — useful baseline feature).
+      - Flight duration in seconds (= number of 1Hz samples)
+      - Cycle index (raw cycle number — useful baseline feature)
       - RUL label (constant within a cyclemax
 
     Returns:
